@@ -1,14 +1,14 @@
 # BatchNorm
 기본적인 BatchNorm 수식은 다음과 같습니다.
 
-### If $ X \in \mathbb{R}^{B \times C}$
-$$ \text{BN}(X) = \gamma \cdot \frac{X - \text{E}_B[X]}{\sqrt{\text{Var}_{B}[X] + \epsilon}} + \beta $$
+### If $X \in \mathbb{R}^{B \times C}$
+$$\text{BN}(X) = \gamma \cdot \frac{X - \text{E}_B[X]}{\sqrt{\text{Var}_{B}[X] + \epsilon}} + \beta$$
 
-### If $ X \in \mathbb{R}^{B \times C \times L}$
-$$ \text{BN}(X) = \gamma \cdot \frac{X - \text{E}_{B,L}[X]}{\sqrt{\text{Var}_{B,L}[X] + \epsilon}} + \beta $$
+### If $X \in \mathbb{R}^{B \times C \times L}$
+$$\text{BN}(X) = \gamma \cdot \frac{X - \text{E}_{B,L}[X]}{\sqrt{\text{Var}_{B,L}[X] + \epsilon}} + \beta$$
 
-### If $ X \in \mathbb{R}^{B \times C \times H \times W}$
-$$ \text{BN}(X) = \gamma \cdot \frac{X - \text{E}_{B,H,W}[X]}{\sqrt{\text{Var}_{B,H,W}[X] + \epsilon}} + \beta $$
+### If $X \in \mathbb{R}^{B \times C \times H \times W}$
+$$\text{BN}(X) = \gamma \cdot \frac{X - \text{E}_{B,H,W}[X]}{\sqrt{\text{Var}_{B,H,W}[X] + \epsilon}} + \beta$$
 해당 수식은 shape = (batch,feature)일 때 feature축을 기준으로 두고 batch축에 대하여 mean과 var를 구하여 normalize 합니다.  
 normalize 후에는 learnable한 $\gamma$와 $\beta$를 곱하고 더해줌으로써 activation을 통과할 때 값이 너무 0 주변에만 분포하지 않도록 합니다.  
 $\beta$가 더해지기 때문에 따로 batchnorm 전의 MLP 등의 layer에서 bias를 학습하지 않아도 됩니다.
@@ -24,14 +24,14 @@ Image에서는 channel축을 기준으로 두고 나머지에 대해 mean과 var
 # LayerNorm
 기본적인 LayerNorm 수식은 다음과 같습니다.
 
-### If $ X \in \mathbb{R}^{B \times C}$
-$$ \text{LN}(X) = \gamma \cdot \frac{X - \text{E}_C[X]}{\sqrt{\text{Var}_{C}[X] + \epsilon}} + \beta $$
+### If $X \in \mathbb{R}^{B \times C}$
+$$\text{LN}(X) = \gamma \cdot \frac{X - \text{E}_C[X]}{\sqrt{\text{Var}_{C}[X] + \epsilon}} + \beta$$
 
-### If $ X \in \mathbb{R}^{L \times B \times C}$
-$$ \text{LN}(X) = \gamma \cdot \frac{X - \text{E}_{C}[X]}{\sqrt{\text{Var}_{C}[X] + \epsilon}} + \beta $$
+### If $X \in \mathbb{R}^{L \times B \times C}$
+$$\text{LN}(X) = \gamma \cdot \frac{X - \text{E}_{C}[X]}{\sqrt{\text{Var}_{C}[X] + \epsilon}} + \beta$$
 
-### If $ X \in \mathbb{R}^{B \times C \times H \times W}$
-$$ \text{LN}(X) = \gamma \cdot \frac{X - \text{E}_{C,H,W}[X]}{\sqrt{\text{Var}_{C,H,W}[X] + \epsilon}} + \beta $$
+### If $X \in \mathbb{R}^{B \times C \times H \times W}$
+$$\text{LN}(X) = \gamma \cdot \frac{X - \text{E}_{C,H,W}[X]}{\sqrt{\text{Var}_{C,H,W}[X] + \epsilon}} + \beta$$
 
 batchnorm과 많은 부분 유사하지만, batchnorm이 batch전체를 이용하여 mean과 var를 구했다면  
 layernorm은 batch내의 데이터 하나에 대한 mean과 var를 구합니다.  
