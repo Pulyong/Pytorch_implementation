@@ -52,7 +52,7 @@ Style Transfer에는 Style을 입히고 싶은 Content Image와 그 때의 Style
 어떤 핸드폰으로 찍은 사진에 모네의 화풍을 입히고 싶다면 핸드폰으로 찍은 사진이 Content Image, 모네의 그림 사진이 Style Image가 되는 것 입니다.  
 이 때 Style Transfer가 완료된 Image의 contrast는 Style Image에 의해서 결정되어야 하고 Content Image와는 독립적이여야 합니다.(우리가 원하는 Style은 Style Image에서 오기 때문입니다.)  
 이것을 위해서 Contrast normalization이 기존에 사용되었습니다.
-$$y_{t,i,j,k}=\frac{x_{t,i,j,k}}{\sum_{l=1}^H\sum_{m=1}^Wx_{t,i,l,m}}$$
+$$y_{t,i,j,k}=\frac{x_{t,i,j,k}}{\sum\nolimits_{l=1}^H \sum\nolimits_{m=1}^W x_{t,i,l,m}}$$
 위 식에서 x는 Batch index t, channel i, spatial position (j,k)를 갖습니다. 따라서 모든 이미지의 channel별 pixel값을 channel별 pixel값의 합으로 나눠서 normalization 시킵니다.  
 하지만 위와 같은 방식은 CNN에서 학습하기가 어렵습니다. 이를 위해 Instance Normalization이 나왔습니다.
 
@@ -63,7 +63,7 @@ Style Transfer에서 Contrast Normalization을 위해 기존 Batch normalization
 
 수식은 다음과 같습니다.
 
-$$IN(X) = \gamma \cdot \frac{X - \mathbb{E}_{H,W}[X]}{\sqrt{Var_{H,W}[X] + \epsilon }} + \beta$$
+$$IN(X) = \gamma \cdot \frac{X - \mathbb{E}_{H,W}[X]}{\sqrt{VAR\_{H,W}[X] + \epsilon}} + \beta$$
 
 # GroupNorm
 Group Normalization은 Batch Normalization의 단점을 극복하기 위해 고안되었습니다. Batch Normalization은 batch size가 작을 경우 성능이 굉장히 낮아집니다. high resolution Image를 사용하는 경우나 Transformer계열의 큰 모델을 사용해야하는 경우에는 하드웨어의 부족으로 인해 batch size를 낮게 설정해야 하는데, 이 때 Batch normalization을 사용 할 경우 성능이 낮아지게 됩니다.  
@@ -75,6 +75,7 @@ Normalization의 수식은 모두 다음과 같이 정의할 수 있습니다.
 
 
 $$\hat{x}_i = \frac{1}{\sigma_i}(x_i-\mu_i), i=(i_N,i_C,i_H,i_W)$$
+
 
 $$\mu=\frac{1}{\sigma_i}\sum_{k \in S_i}x_k$$
 $$\sigma_i=\sqrt{\frac{1}{m}\sum_{k\in S_i}(x_k-\mu_i)^2+\epsilon}$$
