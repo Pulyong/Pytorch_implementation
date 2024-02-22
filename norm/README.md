@@ -86,3 +86,24 @@ $$\sigma_i=\sqrt{\frac{1}{m}\sum_{k\in S_i}(x_k-\mu_i)^2+\epsilon}$$
 * **GroupNorm**은 $S_i = \{k|k_N=i_N,\lfloor \frac{k_C}{C / G} \rfloor = \lfloor \frac{k_C}{C/G}\rfloor \}$으로 Batch와 Channel을 기준으로 하되 Channel을 Group별로 묶어 normalization한다.
 
 위와 같이 Group Normalization은 channel을 group으로 묶어서 group별로 Normalization을 합니다. Group Norm은 최근 파라미터가 큰 모델들의 Normalization 기법으로 많이 볼 수 있습니다.
+
+# Weight Standardization
+Weight Standardization은 Batch Normalization, Group Normalization의 단점을 모두 극복하기 위해서 고안되었습니다.  
+앞서 설명했듯이 Batchnorm은 batch size가 작은 경우에 좋은 성능을 내지 못했습니다.  
+이를 해결하기위해 Groupnorm이 나왔지만 일반적인 large batch training 상황에서는 Batchnorm의 성능보다 좋지 않습니다.
+
+Weight Standardization은 Groupnorm과 같이 batch size에 대한 dependency는 없애면서 large batch size에도 Batchnorm보다 성능이 좋음을 주장했습니다.  
+앞의 normalization 방법들은 주로 feature value에 대해서 normalization을 수행하지만, weight standardization은 weight를 대상으로 normalization을 수행합니다.  
+Weight는 Convolution filter의 weight값을 말합니다.
+
+수식은 다음과 같습니다.
+
+$$\hat{W} = [\hat{W}_{i,j} | \hat{W}_{i,j} = \frac{W_{i,j} - \mu w_i}{\sigma w_i + \epsilon}]$$
+$$y = \hat{W} * x$$
+즉, weight를 weight의 mean var로 normalization 시킨 후 그 weight를 바탕으로 normalization 시키는 것을 말합니다.  
+이 때 $\mu w_i, \sigma w_i$는 다음과 같이 구할 수 있습니다.
+$$\mu w_i = \frac{1}{M}\sum_{j=1}^{M}W_{i,j}$$
+$$\sigma w_i = \sqrt{\frac{1}{M}\sum_{i=1}^M(W_{i,j} - \mu w_i)^2}$$
+
+weight standardization을 Loss와 Gradient landscape를 smoothing하는 효과를 통해 성능 향상을 가져옵니다. 자세한 내용은 다음 링크를 참고하시면 됩니다.  
+https://medium.com/lunit/weight-standardization-449e8fe042bf
